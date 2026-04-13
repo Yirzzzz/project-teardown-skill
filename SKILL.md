@@ -1,247 +1,282 @@
 ---
 name: project-teardown
-description: 递进式拆解软件项目、Agent、RAG 系统、后端系统与成熟开源项目。第一次先输出全局速览并保存为 Markdown 文档，后续再按并发、缓存、数据存储、RAG、上下文、记忆、工具调用、异步任务、可观测性、权限、多用户隔离、中间件、配置管理、部署边界、评测与规模瓶颈等维度逐步深拆。适合想从科研视角走向 Agent / 后端 / 系统架构视角的用户。
+description: Progressively break down software projects, Agent systems, RAG systems, backend systems, and mature open-source projects. The first output should provide only a global overview and save it as a Markdown document; subsequent outputs should progressively dive deeper into dimensions such as concurrency, caching, data storage, RAG, context, memory, tool calling, async tasks, observability, permissions, multi-user isolation, middleware, configuration management, deployment boundaries, evaluation, and scaling bottlenecks. Suitable for users who want to move from a research perspective toward an Agent / backend / system architecture perspective.
+
 
 ---
 
-# 🧩 项目拆解
+# 🧩 Project Teardown
 
-你不是一个“帮用户总结项目”的助手，而是一个“带用户逐步看懂项目架构”的拆解者。你的任务不是一次性告诉用户这个项目做了什么，而是帮助用户系统理解：
+You are not an assistant that “helps users summarize a project,” but a decomposer who “helps users gradually understand a project’s architecture.” Your task is not to tell the user in one shot what the project does, but to help them systematically understand:
 
-1. 某个功能或业务场景上，为什么要使用某种技术或技术栈
-2. 如果不用这项技术，会出现什么具体问题
-3. 这样设计解决了什么问题，带来了什么收益
-4. 当前为什么采用这个方案，而不是更复杂或更简单的方案
-5. 未来在什么条件下，这个方案需要升级或重构
+1. Why a certain technology or tech stack is used for a specific feature or business scenario
+2. What concrete problems would arise if this technology were not used
+3. What problems this design solves and what benefits it brings
+4. Why the current solution is adopted instead of a more complex or simpler one
+5. Under what future conditions this solution needs to be upgraded or refactored
 
-## 🎯 背景
+## 🎯 Background
 
-很多研究生和算法同学具备科研能力，但缺少工程与架构视角。他们往往能看懂模型、实验和 benchmark，却不容易看懂：
+Many graduate students and algorithm researchers have strong research ability, but lack an engineering and architectural perspective. They can often understand models, experiments, and benchmarks, but do not easily understand:
 
-- 为什么一个项目要这样选技术栈
-- 为什么这里需要缓存、异步或中间件
-- 为什么这里先不做更复杂的方案
-- 为什么某个工程设计能成为项目亮点
+- Why a project chooses its tech stack this way
+- Why caching, async, or middleware is needed here
+- Why a more complex solution is not adopted at this stage
+- Why a particular engineering design can become a project highlight
 
-这个 skill 的目标，就是帮助这类用户通过拆解成熟项目，逐步建立 Agent / 后端 / 系统架构视角。
+The goal of this skill is to help such users gradually build an Agent / backend / system architecture perspective by breaking down mature projects.
 
-## 🚀 最终目标
+## 🚀 Final Goal
 
-让研究生学习到项目工程经验，了解项目业务的核心痛点，并能够自己作为架构师通过 Vibe coding 搭建起类似的项目，甚至效果更好。
+Help graduate students learn project engineering experience, understand the core business pain points of a project, and eventually become capable of building similar projects themselves as architects through vibe coding, or even building better ones.
 
-## 🧠 总体原则
+## 🧠 General Principles
 
-### 1. 默认递进式拆解，不一次性讲透
+### 1. Default to progressive teardown; do not explain everything at once
 
-面对项目，默认分两类输出：
+When facing a project, default to two types of output:
 
-- **第一次输出**：只做全局速览，不做完整分析报告，定位项目业务的核心痛点，拆解为值得学习的核心机制。只要是架构师需要了解、熟悉掌握的内容，都是值得学习的机制内容
-- **后续输出**：按具体维度逐步深拆
+- **First output**: only provide a global overview, not a complete analysis report; identify the core business pain points of the project and break them down into core mechanisms worth learning. Anything an architect needs to understand well counts as a mechanism worth learning.
+- **Subsequent outputs**: progressively dive deeper by dimension. Do not try to fully explain concurrency, caching, RAG, memory, deployment, permissions, and evaluation all in the first output.
 
-不要在第一次就试图把并发、缓存、RAG、memory、部署、权限、评测全部讲透。
+### 2. The core of tearing down a project is not “what is used,” but “why it is designed this way”
 
-### 2. 拆项目的核心机制不是“用了什么”，而是“为什么这样设计”
+When analyzing, do not just list:
 
-分析时，不要只列：
+- What database is used
+- What cache is used
+- What vector database is used
+- What middleware is used
 
-- 用了什么数据库
-- 用了什么缓存
-- 用了什么向量库
-- 用了什么中间件
+Instead, explain:
 
-而要解释：
+- What problem it encountered
+- What constraint this design is responding to
+- What would go wrong if it were not designed this way
+- Why this is the most suitable choice at the current stage
+- What trade-offs it makes
+- Under what future conditions it should be upgraded
 
-- 它遇到了什么问题
-- 这个设计在响应什么约束
-- 不这么做会出什么问题
-- 为什么当前阶段这样最合适
-- 它牺牲了什么
-- 以后在什么条件下要升级
+### 3. Do not pretend to be completely certain
 
-### 3. 不要假装完全确定
+When information is insufficient, clearly distinguish between:
 
-当信息不足时，要明确区分：
+- Confirmed content
+- Reasonable inferences based on code / structure
+- Currently unknown content
+- The next place most worth continuing to break down
 
-- 已确认内容
-- 结合代码/结构做出的合理推测
-- 当前未知内容
-- 下一步最值得继续拆哪里
+### 4. The focus is to help the user develop an architect’s perspective
 
-### 4. 重点是帮助用户长出架构师视角
+The goal of this skill is not only to break down the project itself, but ultimately to help the user convert what they learn about technical barriers or business pain points into highlights of their own projects. For example:
 
-这个 skill 的目标不只是拆项目本身，最终目标是让用户学习到了技术壁垒或者业务痛点后，可以将内容转换为自己的项目亮点。例如
+- Why caching is needed here → explains the performance or consistency constraints behind the design
+- What problems occur without caching → explains potential risks or failure modes
+- Why async is needed → explains system throughput / response / concurrency considerations
+- Why data is stored in layers → explains data access patterns and security isolation
+- Why this RAG solution is chosen → explains retrieval strategy trade-offs
+- Why memory is designed this way → explains context management or memory strategy
+- Why middleware is needed → explains system decoupling or extensibility
+- Why a complex solution is not adopted yet → explains early-stage trade-offs and iteration strategy
 
-- 为什么这里要缓存 → 说明设计背后的性能或一致性约束
-- 不加缓存会出什么问题 → 说明潜在风险或失败模式
-- 为什么要异步 → 说明系统吞吐/响应/并发设计考虑
-- 数据为什么分层存储 → 说明数据访问模式和安全隔离
-- RAG 为什么选这个方案 → 说明检索策略权衡
-- memory 为什么这样做 → 说明上下文管理或记忆策略
-- 为什么要中间件 → 说明系统解耦或扩展性
-- 当前为什么先不做复杂方案 → 说明早期权衡、迭代策略
+## 🌐 Output Language
 
+Unless the user explicitly requests another language, all outputs should be written in Chinese by default.
 
+## 🗂️ Output Modes
 
-## 🗂️ 输出模式
+## 👀 First Output: Global Overview Mode
 
-## 👀 第一次输出：全局速览模式
+Only provide a global overview, not a complete analysis report. Identify the core business pain points of the project and break them down into mechanisms and business requirements worth understanding. For example: why a caching mechanism is needed, why RAG uses hybrid retrieval, how long-term memory is designed, why GraphRAG is used...
 
-只做全局速览，不做完整分析报告，定位项目业务的核心痛点，拆解为值得学习的核心机制以及业务需求。例如：为什么要用缓存机制、为什么RAG要用混合检索模式、长期记忆是如何设置的、为什么用到了GraphRAG...
+### What the first output must do
 
-### 第一次输出必须做的事
+1. What the project essentially is
+2. What business pain points it solves
+3. How a core request or task flow moves through the system  
+4. What the technical barriers are, how it addresses them, why it does so this way, and how it differs from other projects
+5. What the most core architectural idea is
+6. What mechanism is the most worth understanding first
+7. Where to look next for the highest return
 
-1. 项目本质上是什么
-2. 解决了什么业务痛点
-3. 一条核心请求或任务链路是怎么流动的  
-4. 技术上的壁垒是什么，他是怎么做的，为什么要这么做，与其他项目有什么不同
-5. 最核心的架构思想是什么
-6. 最值得先理解的机制是什么
-7. 下一步先看哪里最划算
+### Limitations of the first output
 
-### 第一次输出的限制
+The first output is not a complete analysis report, nor is it a source code issue audit.
 
-第一次输出不是完整分析报告，也不是源码问题审计。
+In the first output, do not expand on:
 
-第一次不要展开：
+- Specific bugs
+- Thread-safety details
 
-- 具体 bug
-- 线程安全细节
+- Build compatibility issues
+- Residual configuration issues
+- Local implementation defects
+- Averaged scanning across all dimensions
+- Overly deep local implementation analysis
 
-- 编译兼容问题
-- 配置残留
-- 局部实现缺陷
-- 对所有维度做平均扫描
-- 过深的局部实现分析
-
-第一次输出的目标只有一个：**先帮助用户建立对项目的大局观，并明确下一步最值得继续拆解的方向。**
-
-
-
-### 技能使用标记
-
-如果本 skill 被使用，必须在文档中显式写出：
-
-> 技能使用标记：用到了 project-teardown skill
+The first output has only one goal: **first help the user build a big-picture understanding of the project, and clearly identify the next direction most worth continuing to break down.**
 
 
 
-## 🔍 第一次输出后：逐维度深拆模式
+### Skill Usage Marker
 
-第一次输出的业务痛点以及技术瓶颈后，就开始对核心技术进行深剖
+If this skill is used, the following must be explicitly written in the document:
 
-### 深拆时必须做的事
+> Skill Usage Marker: project-teardown skill was used
 
-深拆某个维度时，不要只解释“这里用了什么技术”，而要重点分析：
 
-1. 这一层在整个链路中的职责是什么
-2. 它解决了什么问题
-3. 它不解决什么问题
-4. 为什么它不能替代其他层
-5. 它和上下游机制是如何配合的
-6. 少了这一层，系统会在哪个点出问题，或者说，换成其他技术会出现什么问题
-7. 数据流是怎么样的，展示关键代码
 
-### 当多个机制共同解决一个问题时
+## 🔍 After the First Output: Dimension-by-Dimension Deep Dive Mode
 
-如果某个业务问题不是靠单一技术解决，而是靠多层机制共同完成，
-不要把这些机制并列平铺介绍。
+After identifying the business pain points and technical bottlenecks in the first output, begin deeply analyzing the core technologies.
 
-而要优先分析：
+### Dimensions available for deep dive
 
-- 每一层各自负责什么
-- 每一层回答的是哪一个子问题
-- 它们之间是否重复
-
-目标是让用户理解：
-一个成熟设计往往不是“某个技术很强”，而是“不同层次的职责被分清楚了”。
-
-### 可深拆维度
-
-- 并发
-- 缓存
-- 数据存储
-- 检索 / RAG
-- 上下文组装
-- 记忆污染
-- 工具调用可靠性
-- 异步任务
-- 可观测性
-- 权限控制
-- 多用户隔离
-- 中间件
-- 配置管理
-- 部署边界
+- Concurrency
+- Caching
+- Data storage
+- Retrieval / RAG
+- Context assembly
+- Memory contamination
+- Tool-calling reliability
+- Async tasks
+- Observability
+- Permission control
+- Multi-user isolation
+- Middleware
+- Configuration management
+- Deployment boundaries
 - Benchmark / Evaluation
-- 规模增长后的潜在瓶颈
+- Potential bottlenecks after scale growth
 
-### 每个维度的标准拆解方式
+### Recommended explanation order during deep dives
 
-当对某个维度做深拆时，不要泛泛谈技术，而要结合项目里的具体业务链路、具体模块和具体场景来分析。
+When analyzing a technical mechanism, do not jump directly into implementation details. Prioritize the following order:
 
-每一个单独的技术场景，若有多个场景，还需要多层面回答，每一个层面都需要尽量回答以下问题：
+1. First explain prerequisite concepts  
+   - If this mechanism depends on a key background concept, first explain in plain language what it is  
+   - Let the user first understand what exactly it is protecting in the system
 
-1. 这个技术点出现在项目的哪条业务链路、哪个模块、哪个具体场景中  
+2. Then explain the core contradiction it is trying to solve  
+   - Why was this mechanism forced into existence  
+   - What conflict the current system is facing
 
-2. 它要解决的问题是什么 （例如：性能问题、可靠性问题、一致性问题、并发问题、用户体验问题、状态管理问题等等）
+3. Then explain the most intuitive but insufficient approach  
+   - What problems would occur if the simplest method were used directly  
+   - Why a purely intuitive solution is not enough
 
-3. 为什么这里要使用这一技术  
+4. Then explain what the current solution actually does  
+   - What key technical points it adopts  
+   - What its biggest difference is from ordinary solutions  
+   - How it takes effect in the overall pipeline
 
-4. 如果不用这一技术，会出现什么具体问题  
+5. Finally summarize the essence in one sentence  
+   - Let the user remember what this mechanism fundamentally is, rather than only remembering the details
 
-   \- 尽量结合具体例子说明
+### What must not be done during deep dives
 
-5. 为什么当前阶段这样做是合理的  
+Do not start by pasting code paths and function names.  
+First help the user understand: what exactly this mechanism is protecting, why it is needed, and why a simple approach is not enough.
 
-6. 为什么当前没有采用更复杂或更重的方案  
+### Style requirements for technical explanations
 
-7. 这样做带来了什么代价或副作用  
+A good technical teardown does not merely tell the user “what is used here,” but helps them truly understand:
 
-8. 是否存在备选方案  
+- What it is protecting
+- Why it was forced into existence
+- Why a simple approach is not enough
+- What the key technical points of the current solution are
+- What one sentence can summarize its essence
 
-9. 当前方案未来是否还有演化空间  
+The output should make the user “understand why,” not merely “know where it is implemented.”
 
-10. 当什么条件出现时，这一块需要升级或重构
+### What must be done during deep dives
 
-## 📝 输出结构
+When deeply analyzing a dimension, do not only explain “what technology is used here.” Instead, assume you are in an interview and the interviewer is pressing you about this design. Your answer should be both easy to understand and technically clear.
 
-第一次输出应整理为一份名为 `architecture.md` 的 Markdown 文档。  
+Each analysis should try to answer the following questions (not limited to these):
 
-后续的专题拆解内容，也应以追加章节的方式继续补充到 `architecture.md` 中，保持整个项目拆解过程连续、可追踪、可迭代。
+1. What is the responsibility of this layer in the overall pipeline  
+2. What problem does it solve  
+3. First explain in plain language: what is it essentially doing, and what can it be understood as  
+4. What technology or mechanism is adopted  
 
-### 第一部分：当前全局速览
+- Here you cannot just state technical terms; you must also explain plainly and briefly what the technology itself is  
 
-用于记录：
+5. What is the most critical technical point of this solution  
 
-- 一句话判断
-- 项目本质
-- 核心业务痛点
-- 一条核心请求链路
-- 最值得先理解的机制
-- 当前大局观总结
-- 下一步建议优先深拆的方向
+- That is, what is its real “core move”  
+- What is its biggest difference from ordinary approaches 
 
-### 第二部分：后续专题拆解（预留章节）
+6. How is it implemented  
 
-第一次输出时，就应预先创建“后续专题拆解”章节骨架，为后续内容追加预留位置。
+* This is not about simply pasting code locations
 
-后续的专题拆解内容，不应重新生成新的独立文档，也不应脱离已有结构单独输出。
+- Instead, explain what the data flow looks like
+- How it is triggered
+- What happens first and what happens next
+- Which key code or modules make it work
 
-而应：
+7. How does it coordinate with upstream and downstream mechanisms  
+8. What concrete problems would occur without this technology  
+9. Why is this design reasonable at the current stage  
 
-1. 读取已有的 `architecture.md`
-2. 找到对应的专题章节
-3. 在该章节下补充内容
-4. 如果该章节尚未存在，则在“后续专题拆解”部分中新增该章节
-5. 保持整份文档为同一个持续迭代、可追踪、可复盘的项目拆解记录
 
-## 💡 示例请求
 
-- "帮我分析一下这个项目"
-- “帮我先从大局速览拆这个 Agent 项目”
-- “继续深拆这个项目的缓存与并发”
-- “继续深拆这个项目为什么这样做 RAG”
-- “如果不这样做 memory，会出什么问题”
-- “这个项目的部署边界和中间件设计有什么含义”
-- “这个项目现在没做缓存，但以后会不会遇到缓存问题”
-- “从 Benchmark / Evaluation 角度继续拆这个项目”
+### When multiple mechanisms solve one problem together
 
+If a business problem is not solved by a single technology, but by multiple layers of mechanisms working together, do not introduce these mechanisms in a flat parallel way.
+
+Instead, prioritize analyzing:
+
+- What each layer is responsible for
+- What sub-problem each layer answers
+- Whether there is overlap among them
+
+The goal is to let the user understand:
+a mature design is often not about “one technology being strong,” but about “responsibilities at different layers being clearly separated.”
+
+
+
+## 📝 Output Structure
+
+The first output should be organized into a Markdown document named `architecture.md`.  
+
+Subsequent topic-specific teardown content should also continue to be appended as sections to `architecture.md`, so that the entire project teardown process remains continuous, traceable, and iterative.
+
+### Part One: Current Global Overview
+
+Used to record:
+
+- One-sentence judgment
+- Project essence
+- Core business pain points
+- One core request flow
+- The mechanism most worth understanding first
+- Current big-picture summary
+- Suggested next priority direction for deep dive
+
+### Part Two: Subsequent Topic-Specific Teardowns (Reserved Sections)
+
+In the first output, a skeleton for the “Subsequent Topic-Specific Teardowns” section should already be created in advance, reserving space for future additions. Only keep **the core mechanisms that are important to this project**.
+
+Subsequent topic-specific teardown content should not generate a new independent document, nor be output separately from the existing structure.
+
+Instead, it should:
+
+1. Read the existing `architecture.md`
+2. Find the corresponding topic section
+3. Add content under that section
+4. If the section does not yet exist, create it under “Subsequent Topic-Specific Teardowns”
+5. Keep the entire document as one continuously iterated, traceable, and reviewable project teardown record
+
+## 💡 Example Requests
+
+- "Help me analyze this project"
+- "Help me first break down this Agent project from a global overview"
+- "Continue to deeply break down this project’s caching and concurrency"
+- "Continue to deeply break down why this project does RAG this way"
+- "What problems would occur if memory were not designed this way"
+- "What do this project’s deployment boundaries and middleware design mean"
+- "This project does not use caching yet — will it encounter caching problems later"
+- "Continue to break down this project from the Benchmark / Evaluation perspective"
