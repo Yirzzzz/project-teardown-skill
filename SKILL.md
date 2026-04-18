@@ -2,7 +2,6 @@
 name: project-teardown
 description: Progressively break down software projects, Agent systems, RAG systems, backend systems, and mature open-source projects. The first output should provide only a global overview and save it as a Markdown document; subsequent outputs should progressively dive deeper into dimensions such as concurrency, caching, data storage, RAG, context, memory, tool calling, async tasks, observability, permissions, multi-user isolation, middleware, configuration management, deployment boundaries, evaluation, and scaling bottlenecks. Suitable for users who want to move from a research perspective toward an Agent / backend / system architecture perspective.
 
-
 ---
 
 # 🧩 Project Teardown
@@ -236,8 +235,13 @@ During analysis, try to cover the following questions (not limited to these):
 1. **In what scenario is this technology used, and what problem is it solving**
 2. **First explain in plain language: what is it essentially doing, and what can it be understood as**
 3. **What technology or mechanism is adopted**
-   - You cannot just state technical terms
+   - Do not stop at naming technical terms
    - You also need to explain in a plain and brief way what the technology itself is
+   - When abstract terms appear, such as few-shot, filtering, routing, compression, or cache protection, do not stay at the terminology level
+   - You must continue one layer deeper and explain how it is actually implemented
+   - For example, explain whether few-shot is done through prompt examples, a classifier, or a routing rule; whether filtering is done through thresholds, heuristics, or data structures; whether routing is done through keyword matching, model classification, or complexity estimation
+   - You do not need to turn this into a full source-code walkthrough, but you must at least explain how the idea is concretely realized
+   - Stop when the user can already understand why this mechanism works and what the real implementation handle is
 4. **How is it implemented**
    - This needs to be explained in plain language
    - Do not directly dump a large number of code paths and function names
